@@ -1,6 +1,6 @@
 # Tokamak Blob Detection — MLOps Project
 
-**ENSAE Paris — Mise en Production (2024-2025)**
+**ENSAE Paris — Mise en Production**
 
 Automated detection of plasma blobs in 2D tokamak simulation data, using Faster R-CNN with a 3-phase training pipeline: supervised warm-up, iterative pseudo-labeling, and MMD domain adaptation.
 
