@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets — NEVER commit
+.env
+*.env
+
+# Data — stored on S3, not in git
+data/
+*.h5
+*.tar.gz
+*.parquet
+*.csv
+
+# Model weights — stored in MLflow / S3, not in git
+models/*.pth
+models/*.pt
+
+# Logs
+logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# MLflow local artifacts
+mlruns/
+mlartifacts/
+
+# Ruff cache
+.ruff_cache/

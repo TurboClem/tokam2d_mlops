@@ -1,0 +1,53 @@
+# ============================================================
+# Tokamak Blob Detection – Central Configuration
+# ============================================================
+# All hyperparameters live here. Never put secrets here.
+# Secrets (MLflow token, S3 credentials) go in .env
+
+# ----- Data ---------------------------------------------------
+data:
+  train_dir: "data/raw/train"          # override with --data-dir
+  img_size: [512, 512]
+
+# ----- Model --------------------------------------------------
+model:
+  score_thresh: 0.05
+  nms_thresh: 0.30
+  detections_per_img: 150              # 150 > default 100: turb frames have many blobs
+
+# ----- Training -----------------------------------------------
+training:
+  phase1_epochs: 3                     # supervised warm-up (cosine LR)
+  batch_size: 2
+  lr: 1.0e-4
+  random_seed: 42
+
+# ----- Pseudo-labeling (Phase 2) ------------------------------
+pseudo_labeling:
+  enabled: true
+  iterations: 3
+  epochs_per_iter: 3
+  score_thresh: 0.55                   # only very confident boxes become pseudo-labels
+  nms_thresh: 0.30
+  min_frames: 3                        # skip PL entirely if fewer frames pass gate
+  lr_factor: 0.3                       # PL LR = training.lr * this (lower = safer)
+  labeled_oversample: 4               # repeat labeled data N× per PL round
+  min_box_area: 100                    # px² — discard tiny spurious detections
+  max_aspect_ratio: 8.0               # discard elongated non-blob-like boxes
+
+# ----- Domain Adaptation (Phase 3 / MMD) ---------------------
+domain_adaptation:
+  enabled: true
+  epochs: 3
+  lr: 3.0e-5
+  lambda_mmd: 0.4
+
+# ----- MLflow -------------------------------------------------
+mlflow:
+  tracking_uri: "http://localhost:5000"    # set to SSP Cloud URI in production
+  experiment_name: "tokam2d-blob-detection"
+
+# ----- Artifacts ----------------------------------------------
+artifacts:
+  model_path: "models/best_model.pth"
+  log_file: "logs/training.log"
